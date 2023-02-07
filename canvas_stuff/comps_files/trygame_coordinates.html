@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!-- saved from url=(0058)https://www.w3schools.com/graphics/trygame_coordinates.htm -->
+<html><link type="text/css" rel="stylesheet" id="dark-mode-custom-link"><link type="text/css" rel="stylesheet" id="dark-mode-general-link"><style lang="en" type="text/css" id="dark-mode-custom-style"></style><style lang="en" type="text/css" id="dark-mode-native-style"></style><style lang="en" type="text/css" id="dark-mode-native-sheet"></style><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style type="text/css">
+body
+{
+font-size:70%;
+font-family:verdana,helvetica,arial,sans-serif;
+}
+</style>
+<script>
+function cnvs_getCoordinates(e)
+{
+x=e.clientX;
+y=e.clientY;
+document.getElementById("xycoordinates").innerHTML="Coordinates: (" + x + "," + y + ")";
+}
+
+function cnvs_clearCoordinates()
+{
+document.getElementById("xycoordinates").innerHTML="";
+}
+</script>
+</head>
+<body style="margin:0px;" class="vsc-initialized">
+
+<div id="coordiv" style="width:auto;height:180px;border:1px solid #d3d3d3;background-color:#f1f1f1;" onmousemove="cnvs_getCoordinates(event)" onmouseout="cnvs_clearCoordinates()"></div>
+<br>
+<div id="xycoordinates"></div>
+
+
+
+</body></html>
