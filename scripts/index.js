@@ -1,5 +1,6 @@
 const canvas = document.getElementById('canvas');
-
+const p1hp = document.getElementById('p1hp');
+const p2hp = document.getElementById('p2hp');
 const main = document.getElementById('main');
 const c = canvas.getContext('2d');
 
@@ -9,13 +10,14 @@ canvas.width = 1076;
 const gravity = 0.2;
 
 class Character {
-  constructor({ x, y, color, width, height, velocity }) {
+  constructor({ x, y, color, width, height, velocity, hp }) {
     this.x = x;
     this.y = y;
     this.color = color;
     this.height = height;
     this.width = width;
     this.velocity = velocity;
+    this.hp = hp;
   }
 
   render() {
@@ -53,7 +55,25 @@ class Character {
   }
 
   attack() {
-    console.log('attack!');
+    //*air attack
+    if (char1.y < 426) {
+      c.fillStyle = 'pink';
+      c.fillRect(
+        this.x + this.width,
+        this.y + this.height / 1.5,
+        this.width / 4,
+        this.height / 1.3
+      );
+    } else {
+      char1.velocity.x = 0;
+      c.fillStyle = 'pink';
+      c.fillRect(
+        this.x + this.width,
+        this.y + this.height / 2.5,
+        this.width,
+        this.height / 3
+      );
+    }
   }
 }
 
@@ -67,6 +87,7 @@ const char1 = new Character({
     x: 0,
     y: 0,
   },
+  hp: 100,
 });
 
 const char2 = new Character({
@@ -79,6 +100,7 @@ const char2 = new Character({
     x: 0,
     y: 0,
   },
+  hp: 100,
 });
 
 window.addEventListener('keydown', (e) => {
@@ -123,6 +145,9 @@ const keyPressed = {
   a: {
     pressed: false,
   },
+  s: {
+    pressed: false,
+  },
   d: {
     pressed: false,
   },
@@ -140,8 +165,9 @@ function updateGameStatus() {
   char1.update();
   char2.update();
 
+  console.log(char1.y);
   if (keyPressed.a.pressed) {
-    char1.velocity.x = -2;
+    char1.velocity.x = -1;
   } else if (keyPressed.d.pressed) {
     char1.velocity.x = 2;
   } else {
@@ -151,7 +177,8 @@ function updateGameStatus() {
   if (keyPressed.x.pressed) {
     char1.attack();
   }
-  console.log(keyPressed);
+  p1hp.textContent = `P1 ${char1.hp}`;
+  p2hp.textContent = `P2 ${char2.hp}`;
 }
 
 updateGameStatus();
