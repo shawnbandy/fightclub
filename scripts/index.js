@@ -4,11 +4,20 @@ const p2hp = document.getElementById('p2hp');
 const main = document.getElementById('main');
 const c = canvas.getContext('2d');
 
+/*
+    TODO: add character classes
+    TODO: move character to different .js file and import it instead
+    TODO: add blocking 
+    TODO: game over screen
+    TODO: character collision, to prevent them from going behind each other
+*/
+
 canvas.height = 576;
 canvas.width = 1076;
 
 const gravity = 0.2;
 
+//*x and y are coordinates where the character is on the canvas
 class Character {
   constructor({ x, y, color, width, height, velocity, hp }) {
     this.x = x;
@@ -20,18 +29,20 @@ class Character {
     this.hp = hp;
   }
 
+  //*redraws the character
   render() {
     c.fillStyle = this.color;
     c.fillRect(this.x, this.y, this.width, this.height);
   }
 
+  //*this will rerender the player with any changes in velocity
   update() {
     this.render();
 
     this.y += this.velocity.y;
     this.x += this.velocity.x;
 
-    //*checks the player to make sure they're nog going out of bounds. May refactor into a function for clarity
+    //*checks the player to make sure they're not going out of bounds. May refactor into a function for clarity
     if (this.x + this.width + this.velocity.x > canvas.width) {
       this.velocity.x = 0;
       this.x = canvas.width - this.width;
@@ -54,8 +65,10 @@ class Character {
     }
   }
 
+  //*creates a rectangle attached to the character. attacking will pause player movement (intentional)
+  //TODO figure out if the attack rectangle collides/overlaps with the enemy character
   attack() {
-    //*air attack
+    //*air attack, which is a downwards strike, if character is NOT on the floor. otherwise regular strike
     if (char1.y < 426) {
       c.fillStyle = 'pink';
       c.fillRect(
@@ -103,6 +116,7 @@ const char2 = new Character({
   hp: 100,
 });
 
+//*listens for specific movement keys, which will affect movement
 window.addEventListener('keydown', (e) => {
   console.log(e.key);
   switch (e.key) {
@@ -123,6 +137,7 @@ window.addEventListener('keydown', (e) => {
   }
 });
 
+//*listens for when the movement key is released, which switches the movement off
 window.addEventListener('keyup', (e) => {
   console.log(e.key);
   switch (e.key) {
@@ -141,6 +156,7 @@ window.addEventListener('keyup', (e) => {
   }
 });
 
+//*obj with keys to switch to true/false
 const keyPressed = {
   a: {
     pressed: false,
@@ -159,13 +175,20 @@ const keyPressed = {
   },
 };
 
+/*
+ *recursive function that updates the game state
+ *starts by clearing the canvas, then redraws the characters
+ *checks to see if a left/right movement key was pressed, and changes velocity depending on that
+ *checks to see if an attack was pressed
+ *updates the player HP
+ */
+
 function updateGameStatus() {
   window.requestAnimationFrame(updateGameStatus);
   c.clearRect(0, 0, canvas.width, canvas.height);
   char1.update();
   char2.update();
 
-  console.log(char1.y);
   if (keyPressed.a.pressed) {
     char1.velocity.x = -1;
   } else if (keyPressed.d.pressed) {
@@ -174,6 +197,7 @@ function updateGameStatus() {
     char1.velocity.x = 0;
   }
 
+  //TODO, run collision detection to check for damage
   if (keyPressed.x.pressed) {
     char1.attack();
   }
